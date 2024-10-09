@@ -1,23 +1,22 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
   ParseIntPipe,
+  Patch,
+  Post,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { SongsService } from './songs.service';
-import { CreateSongDto } from './dto/create-song.dto';
-import { UpdateSongDto } from './dto/update-song.dto';
 
 @Controller('songs')
 export class SongsController {
   constructor(private readonly songsService: SongsService) {}
 
   @Post()
-  create(@Body() createSongDto: CreateSongDto) {
+  create(@Body() createSongDto: Prisma.SongCreateInput) {
     return this.songsService.create(createSongDto);
   }
 
@@ -32,12 +31,15 @@ export class SongsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSongDto: UpdateSongDto) {
-    return this.songsService.update(+id, updateSongDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateSongDto: Prisma.SongUpdateInput,
+  ) {
+    return this.songsService.update(id, updateSongDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.songsService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.songsService.remove(id);
   }
 }

@@ -9,9 +9,13 @@ import { AppService } from './app.service';
 import { SongsModule } from './songs/songs.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { SongsController } from './songs/songs.controller';
+import { PlayListsModule } from './play-lists/play-lists.module';
+import { ArtistsModule } from './artists/artists.module';
+import { UsersModule } from './users/users.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [SongsModule],
+  imports: [SongsModule, PlayListsModule, ArtistsModule, UsersModule, DatabaseModule],
   controllers: [AppController],
   providers: [AppService],
 })
