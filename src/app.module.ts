@@ -13,9 +13,10 @@ import { PlayListsModule } from './play-lists/play-lists.module';
 import { ArtistsModule } from './artists/artists.module';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [SongsModule, PlayListsModule, ArtistsModule, UsersModule, DatabaseModule],
+  imports: [SongsModule, PlayListsModule, ArtistsModule, UsersModule, DatabaseModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

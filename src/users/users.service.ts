@@ -1,28 +1,57 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  create(createUserDto: Prisma.UserCreateInput) {
-    return this.databaseService.user.create({ data: createUserDto });
+  async create(createUserDto: Prisma.UserCreateInput) {
+    const salt = await bcrypt.genSalt();
+    createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
+
+    return this.databaseService.user.create({
+      data: createUserDto,
+      omit: {
+        password: true,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return this.databaseService.user.findMany({
+      omit: {
+        password: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    return this.databaseService.user.findUniqueOrThrow({
+      where: { id },
+      omit: {
+        password: true,
+      },
+    });
   }
 
-  update(id: number, updateUserDto: Prisma.UserUpdateInput) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: Prisma.UserUpdateInput) {
+    return this.databaseService.user.update({
+      data: updateUserDto,
+      where: { id },
+      omit: {
+        password: true,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    return this.databaseService.user.delete({
+      where: { id },
+      omit: {
+        password: true,
+      },
+    });
   }
 }
